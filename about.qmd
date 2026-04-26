@@ -1,0 +1,19 @@
+---
+title: "About"
+image: catt.jpg
+about:
+  template: jolla
+  links:
+    - icon: twitter-x 
+      text: x.com
+      href: https://x.com/menschikowan
+    - icon: github
+      text: Github
+      href: https://github.com/menshikow
+
+---
+mathematics undergrad
+
+Interested in: 
+
+**Pure Mathematics**, **Game Theory**, **Deep Learning Theory**, **Systems Programming**

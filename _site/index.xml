@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss  xmlns:atom="http://www.w3.org/2005/Atom" 
+      xmlns:media="http://search.yahoo.com/mrss/" 
+      xmlns:content="http://purl.org/rss/1.0/modules/content/" 
+      xmlns:dc="http://purl.org/dc/elements/1.1/" 
+      version="2.0">
+<channel>
+<title>notes by menshikow</title>
+<link>https://menshikow.github.io/</link>
+<atom:link href="https://menshikow.github.io/index.xml" rel="self" type="application/rss+xml"/>
+<description>Notes on prue mathematics, systems programming and game theory</description>
+<generator>quarto-1.9.37</generator>
+<lastBuildDate>Sun, 26 Apr 2026 08:30:02 GMT</lastBuildDate>
+<item>
+  <title>Test</title>
+  <dc:creator>menshikow </dc:creator>
+  <link>https://menshikow.github.io/posts/welcome/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>Normal distribution formula:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0Af(x)%20=%20%5Cfrac%7B1%7D%7B%5Csigma%5Csqrt%7B2%5Cpi%7D%7D%20e%5E%7B-%5Cfrac%7B1%7D%7B2%7D%5Cleft(%5Cfrac%7Bx-%5Cmu%7D%7B%5Csigma%7D%5Cright)%5E2%7D%0A"></p>
+<p>And here is a standalone equation block: <img src="https://latex.codecogs.com/png.latex?%0AL%20=%20-%5Cfrac%7B1%7D%7BN%7D%20%5Csum_%7Bi=1%7D%5EN%20%5Cleft%5B%20y_i%20%5Clog(%5Chat%7By%7D_i)%20+%20(1%20-%20y_i)%20%5Clog(1%20-%20%5Chat%7By%7D_i)%20%5Cright%5D%0A"></p>
+
+
+
+ ]]></description>
+  <category>new</category>
+  <guid>https://menshikow.github.io/posts/welcome/</guid>
+  <pubDate>Sun, 26 Apr 2026 08:30:02 GMT</pubDate>
+</item>
+</channel>
+</rss>

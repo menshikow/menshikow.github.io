@@ -1,0 +1,30 @@
+[
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "mathematics undergrad\nInterested in:\nPure Mathematics, Game Theory, Deep Learning Theory, Systems Programming"
+  },
+  {
+    "objectID": "posts/welcome/index.html",
+    "href": "posts/welcome/index.html",
+    "title": "Test",
+    "section": "",
+    "text": "Normal distribution formula:\n\\[\nf(x) = \\frac{1}{\\sigma\\sqrt{2\\pi}} e^{-\\frac{1}{2}\\left(\\frac{x-\\mu}{\\sigma}\\right)^2}\n\\]\nAnd here is a standalone equation block: \\[\nL = -\\frac{1}{N} \\sum_{i=1}^N \\left[ y_i \\log(\\hat{y}_i) + (1 - y_i) \\log(1 - \\hat{y}_i) \\right]\n\\]"
+  },
+  {
+    "objectID": "posts/post-with-code/index.html",
+    "href": "posts/post-with-code/index.html",
+    "title": "Post With Code",
+    "section": "",
+    "text": "This is a post with executable code."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "What’s New",
+    "section": "",
+    "text": "Test\n\n\n\nnew\n\n\n\n\n\n\n\n\n\nmenshikow\n\n\n\n\n\nNo matching items"
+  }
+]
