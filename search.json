@@ -4,13 +4,48 @@
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "mathematics undergrad\nInterested in:\nPure Mathematics, Game Theory, Deep Learning Theory, Systems Programming"
+    "text": "mathematics undergrad\nInterested in:\nPure Mathematics, Game Theory, Deep Learning Theory, Systems Programming\n\n\n\nEmail notifications\n\n\n \n\n Powered by Buttondown."
+  },
+  {
+    "objectID": "posts/zalupa.html",
+    "href": "posts/zalupa.html",
+    "title": "Zero-Sum Games: The Geometry of Optimal Play",
+    "section": "",
+    "text": "In a deterministic, zero-sum game with perfect information (like Chess), the interests of two players are diametrically opposed. If player \\(A\\) wins \\(+1\\), player \\(B\\) must lose \\(-1\\).\nThe goal for any player is to choose a strategy that maximizes their minimum gain the Minimax value."
+  },
+  {
+    "objectID": "posts/zalupa.html#the-core-intuition",
+    "href": "posts/zalupa.html#the-core-intuition",
+    "title": "Zero-Sum Games: The Geometry of Optimal Play",
+    "section": "",
+    "text": "In a deterministic, zero-sum game with perfect information (like Chess), the interests of two players are diametrically opposed. If player \\(A\\) wins \\(+1\\), player \\(B\\) must lose \\(-1\\).\nThe goal for any player is to choose a strategy that maximizes their minimum gain the Minimax value."
+  },
+  {
+    "objectID": "posts/zalupa.html#the-mathematical-framework",
+    "href": "posts/zalupa.html#the-mathematical-framework",
+    "title": "Zero-Sum Games: The Geometry of Optimal Play",
+    "section": "The Mathematical Framework",
+    "text": "The Mathematical Framework\nWe define a finite zero-sum game as a triple \\((S, A, R)\\), where \\(S\\) is the state space, \\(A\\) is the set of actions, and \\(R\\) is the reward function. According to the Minimax Theorem, for any such game, there exists a value \\(V\\) such that:\n\\[\nV = \\max_{a \\in A} \\min_{b \\in B} \\mathbb{E}[R(a, b)] = \\min_{b \\in B} \\max_{a \\in A} \\mathbb{E}[R(a, b)]\n\\]\nThis equality is beautiful because it implies that in a state of equilibrium (a Nash Equilibrium), neither player can improve their outcome by changing their strategy unilaterally."
+  },
+  {
+    "objectID": "posts/zalupa.html#systems-implementation-the-search-bottleneck",
+    "href": "posts/zalupa.html#systems-implementation-the-search-bottleneck",
+    "title": "Zero-Sum Games: The Geometry of Optimal Play",
+    "section": "Systems Implementation: The Search Bottleneck",
+    "text": "Systems Implementation: The Search Bottleneck\nWhile the math is elegant, the cs challenge is the State Space Explosion. For a game like Chess, the tree is too large to solve. We must implement a depth-limited search with an evaluation function.\nTo keep it close to the metal, we want a fast recursive function. Here is a basic implementation of the Minimax logic in C:\n#include &lt;limits.h&gt;\n\nint minimax(int depth, int nodeIndex, bool isMaximizing, int scores[], int h) {\n    // Base case: leaf node reached\n    if (depth == h)\n        return scores[nodeIndex];\n\n    if (isMaximizing) {\n        int best = INT_MIN;\n        for (int i = 0; i &lt; 2; i++) {\n            int val = minimax(depth + 1, nodeIndex * 2 + i, false, scores, h);\n            if (val &gt; best) best = val;\n        }\n        return best;\n    } else {\n        int best = INT_MAX;\n        for (int i = 0; i &lt; 2; i++) {\n            int val = minimax(depth + 1, nodeIndex * 2 + i, true, scores, h);\n            if (val &lt; best) best = val;\n        }\n        return best;\n    }\n}"
+  },
+  {
+    "objectID": "posts/zalupa.html#conclusion",
+    "href": "posts/zalupa.html#conclusion",
+    "title": "Zero-Sum Games: The Geometry of Optimal Play",
+    "section": "Conclusion",
+    "text": "Conclusion\nThe gap between the Minimax Theorem and a Stockfish implementation is where the most interesting work happens. One is about existence proofs; the other is about cache locality, bitboards, and pruning branches of the state space."
   },
   {
     "objectID": "index.html",
     "href": "index.html",
     "title": "What’s New",
     "section": "",
-    "text": "No matching items"
+    "text": "Zero-Sum Games: The Geometry of Optimal Play\n\n\n\nGame Theory\n\nMathematics\n\nAlgorithms\n\n\n\nA deep dive into the Minimax theorem, Von Neumann’s foundations, and the computational cost of searching game trees.\n\n\n\n\n\nApr 26, 2026\n\n\nAdrian Menshikow\n\n\n\n\n\nNo matching items"
   }
 ]
