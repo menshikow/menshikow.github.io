@@ -17,3 +17,8 @@ mathematics undergrad
 Interested in: 
 
 **Pure Mathematics**, **Game Theory**, **Deep Learning Theory**, **Systems Programming**
+
+<form action="https://buttondown.email/api/emails/embed-subscribe/menshikow" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.email/menshikow', 'popupwindow')">
+  <input type="email" name="email" id="bd-email" placeholder="Enter your email">
+  <input type="submit" value="Subscribe">
+</form>
