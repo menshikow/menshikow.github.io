@@ -4,7 +4,7 @@ project:
 website:
   description: "Notes on prue mathematics, systems programming and game theory"
   site-url: https://menshikow.github.io
-  title: "notes by menshikow"
+  title: "menshikow"
   navbar:
     right:
       - about.qmd

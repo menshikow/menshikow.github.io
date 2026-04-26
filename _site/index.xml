@@ -5,11 +5,308 @@
       xmlns:dc="http://purl.org/dc/elements/1.1/" 
       version="2.0">
 <channel>
-<title>notes by menshikow</title>
+<title>menshikow</title>
 <link>https://menshikow.github.io/</link>
 <atom:link href="https://menshikow.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Notes on prue mathematics, systems programming and game theory</description>
 <generator>quarto-1.9.37</generator>
-<lastBuildDate>Sun, 26 Apr 2026 09:27:15 GMT</lastBuildDate>
+<lastBuildDate>Sat, 25 Apr 2026 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>Zero-Sum Games: The Geometry of Optimal Play</title>
+  <dc:creator>Adrian Menshikow</dc:creator>
+  <link>https://menshikow.github.io/posts/zalupa.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<section id="the-core-intuition" class="level2">
+<h2 class="anchored" data-anchor-id="the-core-intuition">The Core Intuition</h2>
+<p>In a deterministic, zero-sum game with perfect information (like Chess), the interests of two players are diametrically opposed. If player <img src="https://latex.codecogs.com/png.latex?A"> wins <img src="https://latex.codecogs.com/png.latex?+1">, player <img src="https://latex.codecogs.com/png.latex?B"> must lose <img src="https://latex.codecogs.com/png.latex?-1">.</p>
+<p>The goal for any player is to choose a strategy that maximizes their minimum gain the <strong>Minimax</strong> value.</p>
+</section>
+<section id="the-mathematical-framework" class="level2">
+<h2 class="anchored" data-anchor-id="the-mathematical-framework">The Mathematical Framework</h2>
+<p>We define a finite zero-sum game as a triple <img src="https://latex.codecogs.com/png.latex?(S,%20A,%20R)">, where <img src="https://latex.codecogs.com/png.latex?S"> is the state space, <img src="https://latex.codecogs.com/png.latex?A"> is the set of actions, and <img src="https://latex.codecogs.com/png.latex?R"> is the reward function. According to the Minimax Theorem, for any such game, there exists a value <img src="https://latex.codecogs.com/png.latex?V"> such that:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0AV%20=%20%5Cmax_%7Ba%20%5Cin%20A%7D%20%5Cmin_%7Bb%20%5Cin%20B%7D%20%5Cmathbb%7BE%7D%5BR(a,%20b)%5D%20=%20%5Cmin_%7Bb%20%5Cin%20B%7D%20%5Cmax_%7Ba%20%5Cin%20A%7D%20%5Cmathbb%7BE%7D%5BR(a,%20b)%5D%0A"></p>
+<p>This equality is beautiful because it implies that in a state of equilibrium (a Nash Equilibrium), neither player can improve their outcome by changing their strategy unilaterally.</p>
+</section>
+<section id="systems-implementation-the-search-bottleneck" class="level2">
+<h2 class="anchored" data-anchor-id="systems-implementation-the-search-bottleneck">Systems Implementation: The Search Bottleneck</h2>
+<p>While the math is elegant, the cs challenge is the <strong>State Space Explosion</strong>. For a game like Chess, the tree is too large to solve. We must implement a depth-limited search with an evaluation function.</p>
+<p>To keep it close to the metal, we want a fast recursive function. Here is a basic implementation of the Minimax logic in C:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">#include </span><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">&lt;limits.h&gt;</span></span>
+<span id="cb1-2"></span>
+<span id="cb1-3"><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">int</span> minimax<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">int</span> depth<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">int</span> nodeIndex<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">bool</span> isMaximizing<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">int</span> scores<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">[],</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">int</span> h<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span></span>
+<span id="cb1-4">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">// Base case: leaf node reached</span></span>
+<span id="cb1-5">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span>depth <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> h<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span id="cb1-6">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> scores<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">[</span>nodeIndex<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">];</span></span>
+<span id="cb1-7"></span>
+<span id="cb1-8">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span>isMaximizing<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span></span>
+<span id="cb1-9">        <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">int</span> best <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> INT_MIN<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">;</span></span>
+<span id="cb1-10">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">int</span> i <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">;</span> i <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">;</span> i<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">++)</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span></span>
+<span id="cb1-11">            <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">int</span> val <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> minimax<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span>depth <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> nodeIndex <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> i<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">false</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> scores<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> h<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">);</span></span>
+<span id="cb1-12">            <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span>val <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> best<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> best <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> val<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">;</span></span>
+<span id="cb1-13">        <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span></span>
+<span id="cb1-14">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> best<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">;</span></span>
+<span id="cb1-15">    <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">else</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span></span>
+<span id="cb1-16">        <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">int</span> best <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> INT_MAX<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">;</span></span>
+<span id="cb1-17">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">int</span> i <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">;</span> i <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">;</span> i<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">++)</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span></span>
+<span id="cb1-18">            <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">int</span> val <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> minimax<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span>depth <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> nodeIndex <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> i<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">true</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> scores<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> h<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">);</span></span>
+<span id="cb1-19">            <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span>val <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;</span> best<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> best <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> val<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">;</span></span>
+<span id="cb1-20">        <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span></span>
+<span id="cb1-21">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> best<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">;</span></span>
+<span id="cb1-22">    <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span></span>
+<span id="cb1-23"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span></span></code></pre></div></div>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>The gap between the <strong>Minimax Theorem</strong> and a <strong>Stockfish implementation</strong> is where the most interesting work happens. One is about existence proofs; the other is about cache locality, bitboards, and pruning branches of the state space.</p>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{menshikow2026,
+  author = {Menshikow, Adrian},
+  title = {Zero-Sum {Games:} {The} {Geometry} of {Optimal} {Play}},
+  date = {2026-04-26},
+  url = {https://menshikow.github.io/posts/zalupa.html},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-menshikow2026" class="csl-entry quarto-appendix-citeas">
+Menshikow, Adrian. 2026. <span>“Zero-Sum Games: The Geometry of Optimal
+Play.”</span> April 26. <a href="https://menshikow.github.io/posts/zalupa.html">https://menshikow.github.io/posts/zalupa.html</a>.
+</div></div></section></div> ]]></description>
+  <category>Game Theory</category>
+  <category>Mathematics</category>
+  <category>Algorithms</category>
+  <guid>https://menshikow.github.io/posts/zalupa.html</guid>
+  <pubDate>Sat, 25 Apr 2026 22:00:00 GMT</pubDate>
+</item>
 </channel>
 </rss>
